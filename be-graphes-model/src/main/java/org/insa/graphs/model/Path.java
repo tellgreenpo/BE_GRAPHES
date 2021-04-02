@@ -201,7 +201,7 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public boolean isValid() {
-        // TODO:
+        //while()
         return false;
     }
 
@@ -210,11 +210,15 @@ public class Path {
      * 
      * @return Total length of the path (in meters).
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public float getLength() {
-        // TODO:
-        return 0;
+    	float totalLength = 0;
+        for (Arc arcs : this.getArcs())
+        {
+        	totalLength += arcs.getLength();
+        }
+        return totalLength;
     }
 
     /**
@@ -225,11 +229,11 @@ public class Path {
      * @return Time (in seconds) required to travel this path at the given speed (in
      *         kilometers-per-hour).
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public double getTravelTime(double speed) {
-        // TODO:
-        return 0;
+    	double totalTravelTime = 3.6*this.getLength()/speed;
+        return totalTravelTime;
     }
 
     /**
