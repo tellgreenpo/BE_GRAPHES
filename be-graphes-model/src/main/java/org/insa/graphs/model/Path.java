@@ -3,6 +3,7 @@ package org.insa.graphs.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * <p>
@@ -198,11 +199,29 @@ public class Path {
      * 
      * @return true if the path is valid, false otherwise.
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public boolean isValid() {
-        //while()
-        return false;
+       boolean valid = true;
+       if(this.isEmpty()) {
+    	   return true;
+    	// Check only one node and no arcs
+       }else if(this.size()==1 && this.getArcs().size() == 0) {
+    	   return true;
+    	// Check first arc origin is origin
+       }else if(this.getArcs().get(0).getOrigin().equals(this.getOrigin())) {
+    	   // Check consecutive arcs share nodes
+    	   List<Arc> arcs = this.getArcs();
+    	   int index =0;
+    	   while(index< arcs.size()-1 && valid) {
+    		   valid = false;
+    		   if((arcs.get(index).getDestination().equals(arcs.get(index+1).getOrigin()))) {
+    			   valid = true;
+    			   index++;
+    		   }
+    	   }   
+       }
+       return valid;
     }
 
     /**
@@ -242,11 +261,14 @@ public class Path {
      * 
      * @return Minimum travel time to travel this path (in seconds).
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public double getMinimumTravelTime() {
-        // TODO:
-        return 0;
+        double time = 0;
+        for(Arc arcs : this.getArcs()) {
+        	time += 3.6*arcs.getLength()/arcs.getRoadInformation().getMaximumSpeed();
+        }
+    	return time;
     }
 
 }
