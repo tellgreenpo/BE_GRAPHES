@@ -34,46 +34,46 @@ public class Path {
     public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
-        boolean valid;
-        int index,indexNode,indexMin;
-        double fastestTime;
-        Arc arc;
-        // For each node check valid and shortest arc
-        indexNode = 0;
-        
-        if(nodes.size()<=1) {
-        	return new Path(graph, arcs); 
+        // empty lists or lists with only one node are valid
+        if(nodes.size()==0) {
+        	return new Path(graph);
         }
-        for(Node currNode : nodes) {
-        	// Check validity ==> at least one arc connects to next node
-        	valid = true;
-        	index = 0;
-        	indexMin = 0;
-        	fastestTime =Double.MAX_VALUE;
-        	while(valid && index<nodes.size()-1) {
-        		valid = false;
-        		arc = currNode.getSuccessors().get(index);
-        		if(arc.getDestination().equals(nodes.get(indexNode+1))) {
-        			// Valid step
+        
+        if(nodes.size()==1) {
+        	return new Path(graph,nodes.get(0));
+        }
+        // Check valid for each node
+        Node currNode;
+        Arc fastestArc;
+        double timeMin, time;
+        boolean valid;
+        for (int i=0;i<nodes.size()-1;i++) {
+        	currNode = nodes.get(i);
+        	fastestArc = currNode.getSuccessors().get(0);
+        	timeMin = Double.MAX_VALUE;
+        	valid = false;
+        	// At least one arc connects consecutive nodes
+        	for(Arc currArc : currNode.getSuccessors()) {
+        		if(currArc.getDestination().equals(nodes.get(i+1))) {
+        			// Arc connects consecutive nodes
+        			// Check shortest
         			valid = true;
-        			// Check fastest valid arc
-        				
-        			if( arc.getMinimumTravelTime() < fastestTime) {
-        				indexMin = index;
-        				fastestTime = arc.getMinimumTravelTime();
+        			time = currArc.getMinimumTravelTime();
+        			if(time < timeMin) {
+        				fastestArc = currArc;
+        				timeMin = time;
         			}
-        			
         		}
-        		arcs.add(currNode.getSuccessors().get(indexMin));
-        		index++;
         	}
+        	
         	if(!valid) {
         		throw new IllegalArgumentException();
         	}
-        	indexNode++;
+        	arcs.add(fastestArc);	
         }
-        	
+        
         return new Path(graph, arcs);
+        
     }
 
     /**
@@ -88,12 +88,49 @@ public class Path {
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
      *         consecutive nodes in the list are not connected in the graph.
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+     // empty lists or lists with only one node are valid
+        if(nodes.size()==0) {
+        	return new Path(graph);
+        }
+        
+        if(nodes.size()==1) {
+        	return new Path(graph,nodes.get(0));
+        }
+        // Check valid for each node
+        Node currNode;
+        Arc shortestArc;
+        float lengthMin, length;
+        boolean valid;
+        for (int i=0;i<nodes.size()-1;i++) {
+        	currNode = nodes.get(i);
+        	shortestArc = currNode.getSuccessors().get(0);
+        	lengthMin = Float.MAX_VALUE;
+        	valid = false;
+        	// At least one arc connects consecutive nodes
+        	for(Arc currArc : currNode.getSuccessors()) {
+        		if(currArc.getDestination().equals(nodes.get(i+1))) {
+        			// Arc connects consecutive nodes
+        			// Check shortest
+        			valid = true;
+        			length = currArc.getLength();
+        			if(length < lengthMin) {
+        				shortestArc = currArc;
+        				lengthMin = length;
+        			}
+        		}
+        	}
+        	
+        	if(!valid) {
+        		throw new IllegalArgumentException();
+        	}
+        	arcs.add(shortestArc);	
+        }
+        
         return new Path(graph, arcs);
     }
 
