@@ -135,9 +135,52 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
         this.percolateUp(index);
     }
 
+    @SuppressWarnings("unused")
+	private int indexOf(E x,int index) {
+    	// Found x index
+    	if(x == this.array.get(index)) {
+    		return index;
+    	}
+    	// index has no sons so stop
+    	if(this.indexLeft(index) >= this.currentSize) {
+    		return 0;
+    	}
+    	// x is smaller so stop
+    	if(x.compareTo(this.array.get(this.indexLeft(index))) < 0) {
+    		return 0;
+    	}else{
+    		// x is bigger so continue
+    		return indexOf(x,this.indexLeft(index)) + indexOf(x,this.indexLeft(index)+1) ;
+    	}
+    }
+    
+    
     @Override
+    // Remove the given element from the priority queue
     public void remove(E x) throws ElementNotFoundException {
-        // TODO:
+    	
+    	// min-heap
+    	// Empty array has no elements
+    	if(this.isEmpty()) {
+    		throw new ElementNotFoundException(x);
+    	}
+    	int index;
+    	// Find x
+    	if(this.array.get(0) == x) {
+    		index = 0;
+    	}else {
+    		index = indexOf(x,0);
+    		// Throw error if not found
+    		if(index == 0) {
+    			throw new ElementNotFoundException(x);
+    		}
+    	}
+    	// Replace x with last
+    	this.arraySet(index, this.array.get(this.currentSize-1));
+    	// Percolate down from x previous position
+    	this.percolateDown(index);
+    	// Update the size
+    	this.currentSize -= 1;
     }
 
     @Override
