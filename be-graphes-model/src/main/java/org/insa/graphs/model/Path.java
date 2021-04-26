@@ -30,13 +30,49 @@ public class Path {
      * 
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
      *         consecutive nodes in the list are not connected in the graph.
-     * 
-     * @deprecated Need to be implemented.
      */
     public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        boolean valid;
+        int index,indexNode,indexMin;
+        double fastestTime;
+        Arc arc;
+        // For each node check valid and shortest arc
+        indexNode = 0;
+        
+        if(nodes.size()<=1) {
+        	return new Path(graph, arcs); 
+        }
+        for(Node currNode : nodes) {
+        	// Check validity ==> at least one arc connects to next node
+        	valid = true;
+        	index = 0;
+        	indexMin = 0;
+        	fastestTime =Double.MAX_VALUE;
+        	while(valid && index<nodes.size()-1) {
+        		valid = false;
+        		arc = currNode.getSuccessors().get(index);
+        		if(arc.getDestination().equals(nodes.get(indexNode+1))) {
+        			// Valid step
+        			valid = true;
+        			// Check fastest valid arc
+        				
+        			if( arc.getMinimumTravelTime() < fastestTime) {
+        				indexMin = index;
+        				fastestTime = arc.getMinimumTravelTime();
+        			}
+        			
+        		}
+        		arcs.add(currNode.getSuccessors().get(indexMin));
+        		index++;
+        	}
+        	if(!valid) {
+        		throw new IllegalArgumentException();
+        	}
+        	indexNode++;
+        }
+        	
         return new Path(graph, arcs);
     }
 
@@ -206,7 +242,8 @@ public class Path {
        if(this.isEmpty()) {
     	   return true;
     	// Check only one node and no arcs
-       }else if(this.size()==1 && this.getArcs().size() == 0) {
+       //else if(this.size()==1 && this.getArcs().size() == 0) {
+       }else if(this.getLength() == 0){
     	   return true;
     	// Check first arc origin is origin
        }else if(this.getArcs().get(0).getOrigin().equals(this.getOrigin())) {
