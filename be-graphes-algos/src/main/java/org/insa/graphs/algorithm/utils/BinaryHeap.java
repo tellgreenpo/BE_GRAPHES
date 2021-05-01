@@ -185,10 +185,10 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     	}
     	
 	   	// Replace x with last
-	   	E last = this.array.get(this.array.size()-1);
+	   	E last = this.array.get(this.currentSize-1);
 	   	this.arraySet(index, last);
 	   	// remove the last element
-    	this.array.remove(this.array.size()-1);
+    	this.array.remove(this.currentSize-1);
 	   	// Update the size before percolate
 	   	this.currentSize--;
 	   	// Percolate down or up from x previous position
