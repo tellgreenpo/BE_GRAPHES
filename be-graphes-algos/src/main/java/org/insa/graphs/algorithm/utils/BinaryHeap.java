@@ -138,30 +138,33 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     }
 
    
-	protected int findindexOf(E x,int index) {
-		// found
-    	if(this.array.get(index) == x) {
+	public int findindexOf(E x,int index) {
+    	if(this.array.get(index).compareTo(x) == 0) {
     		return index;
-    	}else if(this.array.get(index).compareTo(x) > 0){
-    		// Stop exploring because bigger
-    		return Integer.MAX_VALUE;
     	}
+    	// Check for sons
+    	int idxl,idxr;
     	int leftChild = this.indexLeft(index);
-    	if(leftChild>=this.currentSize) {
-    		// No child
-    		return Integer.MAX_VALUE;
+    	boolean left = leftChild < this.currentSize;
+    	boolean right = left ? (leftChild+1 < this.currentSize) : left;
+    	// no sons
+    	if(!left) {
+    		return -1;
     	}
-    	// Explore Left Child
-    	int idx = findindexOf(x,leftChild);
-    	if(idx != Integer.MAX_VALUE) {
-    		// Stop exploring if found
-    		return idx;
+    	// explore left son
+    	idxl = findindexOf(x,leftChild);
+    	if(!right) {
+    		return idxl;
     	}
-    	// Explore Right child
-    	int rightChild = leftChild++;
-    	return  rightChild >= this.currentSize ? Integer.MAX_VALUE : findindexOf(x, rightChild);
-    	
-    }
+    	// explore right son
+    	idxr = findindexOf(x,leftChild+1);
+    	// return result
+    	if(idxl != -1) {
+    		return idxl;
+    	}else {
+    		return idxr;
+    	}
+	}
     
     
     @Override
@@ -177,18 +180,19 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     	int index;
     	// Find x
     	index = this.findindexOf(x, 0);
-    	if (index == Integer.MAX_VALUE) {
+    	if (index == -1) {
     		throw new ElementNotFoundException(x);
     	}
     	
 	   	// Replace x with last
-	   	E last = this.array.get(this.currentSize-1);
+	   	E last = this.array.get(this.array.size()-1);
 	   	this.arraySet(index, last);
 	   	// remove the last element
-    	this.array.remove(this.currentSize-1);
+    	this.array.remove(this.array.size()-1);
 	   	// Update the size before percolate
 	   	this.currentSize--;
 	   	// Percolate down or up from x previous position
+	   	
 	   	if(index != 0 && last.compareTo(this.array.get(this.indexParent(index))) <0 ) {
     		this.percolateUp(index);
 	    }else {
