@@ -138,7 +138,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     }
 
    
-	public int findindexOf(E x,int index) {
+	protected int findindexOf(E x,int index) {
     	if(this.array.get(index).compareTo(x) == 0) {
     		return index;
     	}
