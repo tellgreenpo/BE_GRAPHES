@@ -19,6 +19,8 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     // The heap array.
     protected final ArrayList<E> array;
 
+	
+
     /**
      * Construct a new empty binary heap.
      */
@@ -135,23 +137,30 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
         this.percolateUp(index);
     }
 
-    @SuppressWarnings("unused")
-	private int indexOf(E x,int index) {
-    	// Found x index
-    	if(x == this.array.get(index)) {
+   
+	protected int findindexOf(E x,int index) {
+		// found
+    	if(this.array.get(index) == x) {
     		return index;
+    	}else if(this.array.get(index).compareTo(x) > 0){
+    		// Stop exploring because bigger
+    		return Integer.MAX_VALUE;
     	}
-    	// index has no sons so stop
-    	if(this.indexLeft(index) >= this.currentSize) {
-    		return 0;
+    	int leftChild = this.indexLeft(index);
+    	if(leftChild>=this.currentSize) {
+    		// No child
+    		return Integer.MAX_VALUE;
     	}
-    	// x is smaller so stop
-    	if(x.compareTo(this.array.get(this.indexLeft(index))) < 0) {
-    		return 0;
-    	}else{
-    		// x is bigger so continue
-    		return indexOf(x,this.indexLeft(index)) + indexOf(x,this.indexLeft(index)+1) ;
+    	// Explore Left Child
+    	int idx = findindexOf(x,leftChild);
+    	if(idx != Integer.MAX_VALUE) {
+    		// Stop exploring if found
+    		return idx;
     	}
+    	// Explore Right child
+    	int rightChild = leftChild++;
+    	return  rightChild >= this.currentSize ? Integer.MAX_VALUE : findindexOf(x, rightChild);
+    	
     }
     
     
@@ -164,23 +173,27 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     	if(this.isEmpty()) {
     		throw new ElementNotFoundException(x);
     	}
+
     	int index;
     	// Find x
-    	if(this.array.get(0) == x) {
-    		index = 0;
-    	}else {
-    		index = indexOf(x,0);
-    		// Throw error if not found
-    		if(index == 0) {
-    			throw new ElementNotFoundException(x);
-    		}
+    	index = this.findindexOf(x, 0);
+    	if (index == Integer.MAX_VALUE) {
+    		throw new ElementNotFoundException(x);
     	}
-    	// Replace x with last
-    	this.arraySet(index, this.array.get(this.currentSize-1));
-    	// Percolate down from x previous position
-    	this.percolateDown(index);
-    	// Update the size
-    	this.currentSize -= 1;
+    	
+	   	// Replace x with last
+	   	E last = this.array.get(this.currentSize-1);
+	   	this.arraySet(index, last);
+	   	// remove the last element
+    	this.array.remove(this.currentSize-1);
+	   	// Update the size before percolate
+	   	this.currentSize--;
+	   	// Percolate down or up from x previous position
+	   	if(index != 0 && last.compareTo(this.array.get(this.indexParent(index))) <0 ) {
+    		this.percolateUp(index);
+	    }else {
+	   		this.percolateDown(index);
+	   	}
     }
 
     @Override
