@@ -1,9 +1,11 @@
 package org.insa.graphs.algorithm.shortestpath;
 
+import org.insa.graphs.model.Node;
+
 public class Label implements Comparable<Label>{
 	
 	// Sommet associe au label
-	private final int idNode;
+	private final Node node;
 	// True cout min definitivement connu par algorithme
 	private boolean marque;
 	// Valeur courante du plus court chemin
@@ -13,8 +15,8 @@ public class Label implements Comparable<Label>{
 
 	
 	// Constructor
-	public Label(int idNode,boolean marque,int cout,int idLastArc) {
-		this.idNode = idNode;
+	public Label(Node node,boolean marque,int cout,int idLastArc) {
+		this.node = node;
 		this.marque = marque;
 		this.cout = cout;
 		this.idLastArc = idLastArc;
@@ -24,8 +26,8 @@ public class Label implements Comparable<Label>{
 		return this.cout;
 	}
 	
-	public int getNode() {
-		return this.idNode;
+	public Node getNode() {
+		return this.node;
 	}
 	
 	public boolean getMarque() {
