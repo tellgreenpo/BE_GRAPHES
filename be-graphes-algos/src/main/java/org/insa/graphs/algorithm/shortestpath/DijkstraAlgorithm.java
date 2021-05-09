@@ -1,33 +1,21 @@
 package org.insa.graphs.algorithm.shortestpath;
 
 import java.util.ArrayList;
-import java.util.List;
-
+import java.util.Collections;
+import org.insa.graphs.algorithm.AbstractInputData;
+import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.algorithm.utils.BinaryHeap;
 import org.insa.graphs.algorithm.utils.ElementNotFoundException;
 import org.insa.graphs.algorithm.utils.EmptyPriorityQueueException;
 import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Node;
+import org.insa.graphs.model.Path;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
-    }
-    /**
-    private int search(Node x,ArrayList<Label> list) throws ElementNotFoundException {
-    	int i=0;
-    	boolean found = false;
-    	while(i<list.size() && !found) {
-    		found = list.get(i).getNode() == x.getId() ? true : false;
-    		i++;
-    	}
-    	if(!found) {
-    		throw new ElementNotFoundException(x);
-    	}
-    	return i;
-    }
-    */
+    };
 
     @Override
     protected ShortestPathSolution doRun() {
@@ -38,7 +26,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         ArrayList<Label> tabLabel = new ArrayList<Label>();
         // BinaryHeap
         BinaryHeap<Label> heap = new BinaryHeap<Label>();
-        boolean allMarked = false;
         Label currLabel;
         
         
@@ -47,11 +34,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	// origin cost 0
         	Label label = null;
         	if (node == data.getOrigin()) {
-        		label = new Label(node,false,0,0);
+        		label = new Label(node,false,0,null);
         		// Insert origin in heap
         		heap.insert(label);
         	}else {
-        		label = new Label(node,false,Double.MAX_VALUE,0);
+        		label = new Label(node,false,Double.MAX_VALUE,null);
         	}
         	tabLabel.add(label);
         }
@@ -69,13 +56,15 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	currLabel.setMarque(true);
         	// For y successors of x
         	for (Arc arc : currLabel.getNode().getSuccessors()) {
-        		// retrieve the label
-        		Label succesor = null;
+        		// retrieve the label check line 47
+        		Label succesor = tabLabel.get(arc.getDestination().getId());
+        		/**
         		int index = 0;
         		while (index < tabLabel.size() && succesor.getNodeId()==arc.getDestination().getId()) {
         			succesor = tabLabel.get(index); 
         			index++;
         		}
+        		*/
         		// if not Mark(y) then
         		if (!succesor.getMarque()) {
         			// if(cost(y) > cost(x)+W(x,y)) then
@@ -83,6 +72,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         				// Cost(y) = Cost(x)+W(x,y)
         				succesor.setCost(currLabel.getCost()+arc.getMinimumTravelTime());
         				succesor.setFather(arc);
+        				
         				// if Exist(y,Tas) then
         				try {
         					// update element in heap
@@ -98,8 +88,29 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	}
         	
         }
+        // Unfeasible
+        if(!tabLabel.get(tabLabel.size()-1).getMarque()) {
+        	solution = new ShortestPathSolution(data,Status.INFEASIBLE);
+        }else {
         // Create solution from father of each Node
-        // Reverse to get path
+        	ArrayList<Node> nodes = new ArrayList<Node>();
+        	Node father = data.getDestination();
+        	while (!father.equals(data.getOrigin())) {
+        		nodes.add(father);
+        		// On va chercher dans le graph le node qui correspond a l'origine de l'arc pere contenu dans le label correspondant au node actuel
+        		father = data.getGraph().get(tabLabel.get(father.getId()).getFather().getOrigin().getId());
+        	}
+        	nodes.add(data.getOrigin());
+        	// Reverse to create Path
+        	Collections.reverse(nodes);
+        	Path path = null;
+        	if (data.getMode().equals(AbstractInputData.Mode.TIME)) {
+        		path = Path.createFastestPathFromNodes(data.getGraph(), nodes);
+        	}else {
+        		path = Path.createShortestPathFromNodes(data.getGraph(), nodes);
+        	}
+        	solution = new ShortestPathSolution(data,Status.OPTIMAL,path);
+        };
         return solution;
     }
 
