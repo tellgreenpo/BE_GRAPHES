@@ -1,5 +1,6 @@
 package org.insa.graphs.algorithm.shortestpath;
 
+import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Node;
 
 public class Label implements Comparable<Label>{
@@ -9,20 +10,20 @@ public class Label implements Comparable<Label>{
 	// True cout min definitivement connu par algorithme
 	private boolean marque;
 	// Valeur courante du plus court chemin
-	private int cout;
+	private double cout;
 	// Arc precedent sur le chemin plus court
-	private int idLastArc;
+	private Arc lastArc;
 
 	
 	// Constructor
-	public Label(Node node,boolean marque,int cout,int idLastArc) {
+	public Label(Node node,boolean marque,double cout,Arc lastArc) {
 		this.node = node;
 		this.marque = marque;
 		this.cout = cout;
-		this.idLastArc = idLastArc;
+		this.lastArc = lastArc;
 	}
 	
-	public int getCost() {
+	public double getCost() {
 		return this.cout;
 	}
 	
@@ -30,15 +31,19 @@ public class Label implements Comparable<Label>{
 		return this.node;
 	}
 	
+	public int getNodeId() {
+		return this.node.getId();
+	}
+	
 	public boolean getMarque() {
 		return this.marque;
 	}
 	
-	public int getFather() {
-		return this.idLastArc;
+	public Arc getFather() {
+		return this.lastArc;
 	}
 	
-	public void setCost(int cost) {
+	public void setCost(double cost) {
 		this.cout = cost;
 	}
 	
@@ -46,13 +51,13 @@ public class Label implements Comparable<Label>{
 		this.marque = marque;
 	}
 	
-	public void setFather(int idLastArc) {
-		this.idLastArc = idLastArc;
+	public void setFather(Arc lastArc) {
+		this.lastArc = lastArc;
 	}
 	
 	@Override
 	public int compareTo(Label o) {
-		return Integer.compare(cout, o.getCost());
+		return Double.compare(cout, o.getCost());
 	}
 	
 }
