@@ -42,18 +42,21 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	}
         	tabLabel.add(label);
         }
-        
+        // Notify observer
+        notifyOriginProcessed(data.getOrigin());
         // While non marked Nodes exist
         // Nodes ID 0 to N-1 and label insert in ArrayList in the same order
         while (!tabLabel.get(data.getDestination().getId()).getMarque()) {
         	//x = ExtractMin(Heap)
         	try {
         		currLabel = heap.deleteMin();
+        		notifyNodeReached(currLabel.getNode());
         	}catch (EmptyPriorityQueueException e) {
         		break;
         	}
         	//Mark(x) = True
         	currLabel.setMarque(true);
+        	notifyNodeMarked(currLabel.getNode());
         	// For y successors of x
         	for (Arc arc : currLabel.getNode().getSuccessors()) {
         		// retrieve the label check line 47
@@ -89,9 +92,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	
         }
         // Unfeasible
-        if(!tabLabel.get(tabLabel.size()-1).getMarque()) {
+        if(!tabLabel.get(data.getDestination().getId()).getMarque()) {
         	solution = new ShortestPathSolution(data,Status.INFEASIBLE);
         }else {
+        	notifyDestinationReached(tabLabel.get(data.getDestination().getId()).getNode());
         // Create solution from father of each Node
         	ArrayList<Node> nodes = new ArrayList<Node>();
         	Node father = data.getDestination();
