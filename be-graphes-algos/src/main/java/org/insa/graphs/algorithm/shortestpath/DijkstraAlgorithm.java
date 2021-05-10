@@ -59,6 +59,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	notifyNodeMarked(currLabel.getNode());
         	// For y successors of x
         	for (Arc arc : currLabel.getNode().getSuccessors()) {
+        		
+        		if (!data.isAllowed(arc)) {
+        			continue;
+        		}
         		// retrieve the label check line 47
         		Label succesor = tabLabel.get(arc.getDestination().getId());
         		/**
@@ -70,11 +74,19 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         		*/
         		// if not Mark(y) then
         		if (!succesor.getMarque()) {
+        			
+        			
+        			if (Double.isInfinite(succesor.getCost()) && Double.isFinite(currLabel.getCost()+arc.getMinimumTravelTime())) {
+                            notifyNodeReached(arc.getDestination());
+                        }
+        			
         			// if(cost(y) > cost(x)+W(x,y)) then
         			if(succesor.getCost() > (currLabel.getCost()+arc.getMinimumTravelTime())) {
         				// Cost(y) = Cost(x)+W(x,y)
         				succesor.setCost(currLabel.getCost()+arc.getMinimumTravelTime());
         				succesor.setFather(arc);
+        				
+        				
         				
         				// if Exist(y,Tas) then
         				try {
