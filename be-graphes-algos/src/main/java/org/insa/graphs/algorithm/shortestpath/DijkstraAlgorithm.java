@@ -65,13 +65,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         		}
         		// retrieve the label check line 47
         		Label succesor = tabLabel.get(arc.getDestination().getId());
-        		/**
-        		int index = 0;
-        		while (index < tabLabel.size() && succesor.getNodeId()==arc.getDestination().getId()) {
-        			succesor = tabLabel.get(index); 
-        			index++;
-        		}
-        		*/
         		// if not Mark(y) then
         		if (!succesor.getMarque()) {
         			
