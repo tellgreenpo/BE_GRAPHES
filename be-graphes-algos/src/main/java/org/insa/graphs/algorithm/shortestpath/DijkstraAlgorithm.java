@@ -76,14 +76,14 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         		if (!succesor.getMarque()) {
         			
         			
-        			if (Double.isInfinite(succesor.getCost()) && Double.isFinite(currLabel.getCost()+arc.getMinimumTravelTime())) {
+        			if (Double.isInfinite(succesor.getCost()) && Double.isFinite(currLabel.getCost()+data.getCost(arc))) {
                             notifyNodeReached(arc.getDestination());
                         }
         			
         			// if(cost(y) > cost(x)+W(x,y)) then
-        			if(succesor.getCost() > (currLabel.getCost()+arc.getMinimumTravelTime())) {
+        			if(succesor.getCost() > (currLabel.getCost()+data.getCost(arc))) {
         				// Cost(y) = Cost(x)+W(x,y)
-        				succesor.setCost(currLabel.getCost()+arc.getMinimumTravelTime());
+        				succesor.setCost(currLabel.getCost()+data.getCost(arc));
         				succesor.setFather(arc);
         				
         				
