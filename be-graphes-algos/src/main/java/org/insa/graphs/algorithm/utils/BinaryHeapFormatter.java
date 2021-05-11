@@ -21,7 +21,7 @@ public class BinaryHeapFormatter {
         public final String lastmargin;
 
         /**
-         * Creaet a new {@code Context}.
+         * Create a new {@code Context}.
          * 
          * @param acu        The accumulated string.
          * @param margin     The current margin.
