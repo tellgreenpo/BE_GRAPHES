@@ -19,6 +19,9 @@ import org.junit.Test;
 // use abstract class instead of interface
 // ==> share code among several closely related classes (ShortestPathAlgorithms)
 
+// Create parameterized Tests with different paths for the maps for more concise code
+// 
+
 public abstract class ShortestPathTest{
 	
 	// data for maps test
@@ -50,8 +53,11 @@ public abstract class ShortestPathTest{
 		Graph graph = reader.read();
 		// Create data for different conditions
 		sameOriginDestinationFranceData = new ShortestPathData(graph,graph.get(0),graph.get(0),null);
+		// Create Algo for each case
 		noPathFranceData = new ShortestPathData(graph,null,null,null);
+		// Create algo for each case
 		toulouseLesBaylesFranceData = new ShortestPathData(graph,null,null,null);
+		// Create algo for each case
 		
 		PathReader pathReader = new BinaryPathReader(new DataInputStream(new FileInputStream(basePath+"A REMPLIR")));
 		pathToulouseLesBayles = pathReader.readPath(graph);
@@ -61,8 +67,11 @@ public abstract class ShortestPathTest{
 		graph = reader.read();
 		// Create data for different conditions
 		sameOriginDestinationToulouseData = new ShortestPathData(graph,graph.get(0),graph.get(0),null);
+		// Create algo for each case
 		noPathToulouseData = new ShortestPathData(graph,null,null,null);
+		// Create algo for each case
 		insaJeanJauToulouseData = new ShortestPathData(graph,null,null,null);
+		// Create algo for each case
 		
 		pathReader = new BinaryPathReader(new DataInputStream(new FileInputStream(basePath+"A REMPLIR")));
 		pathInsaJeanJau = pathReader.readPath(graph);
@@ -71,10 +80,14 @@ public abstract class ShortestPathTest{
 		reader = new BinaryGraphReader(new DataInputStream(new FileInputStream(carreMapPath)));
 		graph = reader.read();
 		sameOriginDestinationCarreData = new ShortestPathData(graph,graph.get(0),graph.get(0),null);
+		// Create algo for each case
 		sommet2SommetCarreData = new ShortestPathData(graph,null,null,null);
+		// Create algo for each case
 		
 		pathReader = new BinaryPathReader(new DataInputStream(new FileInputStream(basePath+"A REMPLIR")));
 		pathSommet2Sommet = pathReader.readPath(graph);
+		// Create algo for each case
+		
 		
 	}
 	
