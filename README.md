@@ -65,9 +65,14 @@ Another way is to do a bare clone and then mirror it to your repository: [https:
 # Encountered Problems
 
 BinaryHeap remove method ==> deleting element from the list created an index problem while running Dijkstra
+
 Dijkstra implementation ==> adding Labels in the same order as Nodes in order to access the correct one easily
+
 Dijkstra implementation ==> Separing the init method from the main in order to be able to override it for A*
+
 A* implementation ==> Problem with changing type, explored creating and hidding attributes to force them to LabelStar class
+
 A* implementation ==> Changed all ArrayList to simple array because it caused problems
+
 A* implementation ==> At run time the algorithm explores nodes in a weird pattern and create very long paths
 
