@@ -1,8 +1,5 @@
 package org.insa.graphs.algorithm.shortestpath;
 
-import java.util.ArrayList;
-
-import org.insa.graphs.algorithm.utils.BinaryHeap;
 import org.insa.graphs.model.Node;
 
 public class AStarAlgorithm extends DijkstraAlgorithm {
@@ -15,8 +12,9 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
     
     
     @Override
-    ArrayList<LabelStar> initLabel(ShortestPathData data){
-    	 ArrayList<LabelStar> tabLabel = new ArrayList<LabelStar>();
+    LabelStar[] initLabel(ShortestPathData data){
+    	 LabelStar[] tabLabel = new LabelStar[data.getGraph().size()];
+    	 int idx = 0;
          for (Node node : data.getGraph().getNodes()) {
          	// origin cost 0
          	LabelStar label = null;
@@ -25,7 +23,8 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
          	}else {
          		label = new LabelStar(node,false,Double.MAX_VALUE,null,Double.MAX_VALUE);
          	}
-         	tabLabel.add(label);
+         	tabLabel[idx]  = label;
+         	idx++;
          }
          return tabLabel;
     }

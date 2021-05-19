@@ -1,7 +1,5 @@
 package org.insa.graphs.algorithm.shortestpath;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,7 +10,6 @@ import org.insa.graphs.model.io.BinaryGraphReader;
 import org.insa.graphs.model.io.BinaryPathReader;
 import org.insa.graphs.model.io.GraphReader;
 import org.insa.graphs.model.io.PathReader;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
