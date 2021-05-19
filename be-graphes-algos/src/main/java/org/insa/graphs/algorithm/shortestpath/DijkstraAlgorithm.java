@@ -12,41 +12,46 @@ import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Path;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
+	
 
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
     };
-
-    @Override
-    protected ShortestPathSolution doRun() {
-    	
-        final ShortestPathData data = getInputData();
-        ShortestPathSolution solution = null;
-        // Label list
-        ArrayList<Label> tabLabel = new ArrayList<Label>();
-        // BinaryHeap
-        BinaryHeap<Label> heap = new BinaryHeap<Label>();
-        Label currLabel;
-        
-        
-        // Initialize label for each Node
+    
+    Label[] initLabel(ShortestPathData data) {
+    	// Initialize label for each Node
+        Label[] tabLabel = new Label[data.getGraph().size()];
+        int idx = 0;
         for (Node node : data.getGraph().getNodes()) {
         	// origin cost 0
         	Label label = null;
         	if (node == data.getOrigin()) {
         		label = new Label(node,false,0,null);
-        		// Insert origin in heap
-        		heap.insert(label);
         	}else {
         		label = new Label(node,false,Double.MAX_VALUE,null);
         	}
-        	tabLabel.add(label);
+        	tabLabel[idx] = label;
+        	idx++;
         }
+        return tabLabel;
+    }
+
+    @Override
+    protected ShortestPathSolution doRun() {
+    	
+    	Label currLabel = null;
+    	final ShortestPathData data = getInputData();
+    	Label[] tabLabel = initLabel(data);
+        ShortestPathSolution solution = null;
+        BinaryHeap<Label> heap = new BinaryHeap<Label>();
+        // insert Origin
+        heap.insert(tabLabel[data.getOrigin().getId()]);
+        
         // Notify observer
         notifyOriginProcessed(data.getOrigin());
         // While non marked Nodes exist
         // Nodes ID 0 to N-1 and label insert in ArrayList in the same order
-        while (!tabLabel.get(data.getDestination().getId()).getMarque()) {
+        while (!tabLabel[data.getDestination().getId()].getMarque()) {
         	//x = ExtractMin(Heap)
         	try {
         		currLabel = heap.deleteMin();
@@ -64,7 +69,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         			continue;
         		}
         		// retrieve the label check line 47
-        		Label succesor = tabLabel.get(arc.getDestination().getId());
+        		Label succesor = tabLabel[arc.getDestination().getId()];
         		// if not Mark(y) then
         		if (!succesor.getMarque()) {
         			
@@ -97,17 +102,17 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	
         }
         // Unfeasible
-        if(!tabLabel.get(data.getDestination().getId()).getMarque()) {
+        if(!tabLabel[data.getDestination().getId()].getMarque()) {
         	solution = new ShortestPathSolution(data,Status.INFEASIBLE);
         }else {
-        	notifyDestinationReached(tabLabel.get(data.getDestination().getId()).getNode());
+        	notifyDestinationReached(tabLabel[data.getDestination().getId()].getNode());
         // Create solution from father of each Node
         	ArrayList<Node> nodes = new ArrayList<Node>();
         	Node father = data.getDestination();
         	while (!father.equals(data.getOrigin())) {
         		nodes.add(father);
         		// On va chercher dans le graph le node qui correspond a l'origine de l'arc pere contenu dans le label correspondant au node actuel
-        		father = data.getGraph().get(tabLabel.get(father.getId()).getFather().getOrigin().getId());
+        		father = data.getGraph().get(tabLabel[father.getId()].getFather().getOrigin().getId());
         	}
         	nodes.add(data.getOrigin());
         	// Reverse to create Path
