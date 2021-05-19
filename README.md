@@ -76,3 +76,6 @@ A* implementation ==> Changed all ArrayList to simple array because it caused pr
 
 A* implementation ==> At run time the algorithm explores nodes in a weird pattern and create very long paths
 
+A* implementation ==> Modified constructor in order to be able to switch the modes but created a problem because the cost of origin was not 0
+
+
