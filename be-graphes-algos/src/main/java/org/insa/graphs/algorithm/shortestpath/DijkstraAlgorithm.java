@@ -101,7 +101,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	}
         	
         }
-        // Unfeasible
+        // Infeasible
         if(!tabLabel[data.getDestination().getId()].getMarque()) {
         	solution = new ShortestPathSolution(data,Status.INFEASIBLE);
         }else {
