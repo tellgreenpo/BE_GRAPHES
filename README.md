@@ -64,18 +64,19 @@ Another way is to do a bare clone and then mirror it to your repository: [https:
 
 # Encountered Problems
 
-BinaryHeap remove method ==> deleting element from the list created an index problem while running Dijkstra
+1. BinaryHeap remove method ==> deleting element from the list created an index problem while running Dijkstra
 
-Dijkstra implementation ==> adding Labels in the same order as Nodes in order to access the correct one easily
+2. Dijkstra implementation ==> adding Labels in the same order as Nodes in order to access the correct one easily
 
-Dijkstra implementation ==> Separing the init method from the main in order to be able to override it for A*
+3. Dijkstra implementation ==> Separing the init method from the main in order to be able to override it for A*
 
-A* implementation ==> Problem with changing type, explored creating and hidding attributes to force them to LabelStar class
+4. A* implementation ==> Problem with changing type, explored creating and hidding attributes to force them to LabelStar class
 
-A* implementation ==> Changed all ArrayList to simple array because it caused problems
+5. A* implementation ==> Changed all ArrayList to simple array because it caused problems
 
-A* implementation ==> At run time the algorithm explores nodes in a weird pattern and create very long paths
+6. A* implementation ==> At run time the algorithm explores nodes in a weird pattern and create very long paths
 
-A* implementation ==> Modified constructor in order to be able to switch the modes but created a problem because the cost of origin was not 0
+7. A* implementation ==> Modified constructor in order to be able to switch the modes but created a problem because the cost of origin was not 0
 
+8. JUnit tests creation ==> 
 

@@ -9,10 +9,13 @@ import org.insa.graphs.model.io.BinaryGraphReader;
 import org.insa.graphs.model.io.BinaryPathReader;
 import org.insa.graphs.model.io.GraphReader;
 import org.insa.graphs.model.io.PathReader;
+import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.BeforeClass;
+import org.junit.Test;
+
 import static org.insa.graphs.algorithm.AbstractSolution.Status;
 import static org.insa.graphs.algorithm.ArcInspectorFactory.*;
-import static org.insa.graphs.algorithm.ArcInspectorFactory.FilterType;
 
 // use abstract class instead of interface
 // ==> share code among several closely related classes (ShortestPathAlgorithms)
@@ -30,7 +33,8 @@ public abstract class ShortestPathTest{
 	protected ShortestPathAlgorithm algorithmDataSet1,algorithmDataSet2,algorithmDataSet3;
 	
 	// Path solution
-	protected Path pathToulouseAuch,pathInsaJeanJau,pathSommet2Sommet;
+	protected Path pathToulouseAuch,pathInsaJeanJau,pathSommet2Sommet,sameOriginDestinationCarrePath,
+							sameOriginDestinationINSAPath,sameOriginDestinationToulousePath;
 	
 	
 	protected ShortestPathData sameOriginDestinationMpData,noPathMpData,toulouseAuchMpData,
@@ -61,6 +65,8 @@ public abstract class ShortestPathTest{
 		
 		PathReader pathReader = new BinaryPathReader(new DataInputStream(new FileInputStream(basePath+"A REMPLIR")));
 		pathToulouseAuch = pathReader.readPath(graph);
+		pathReader = new BinaryPathReader(new DataInputStream(new FileInputStream(basePath+"A REMPLIR")));
+		sameOriginDestinationToulousePath = pathReader.readPath(graph);
 		
 	// Initialization variables for tests on Toulouse map
 		// graph Reader for Toulouse
@@ -70,7 +76,8 @@ public abstract class ShortestPathTest{
 		noPathToulouseData = new ShortestPathData(graph,null,null,null);
 		insaJeanJauToulouseData = new ShortestPathData(graph,null,null,null);
 		
-		
+		pathReader = new BinaryPathReader(new DataInputStream(new FileInputStream(basePath+"A REMPLIR")));
+		sameOriginDestinationINSAPath = pathReader.readPath(graph);
 		pathReader = new BinaryPathReader(new DataInputStream(new FileInputStream(basePath+"A REMPLIR")));
 		pathInsaJeanJau = pathReader.readPath(graph);
 		
@@ -84,12 +91,32 @@ public abstract class ShortestPathTest{
 		
 		pathReader = new BinaryPathReader(new DataInputStream(new FileInputStream(basePath+"A REMPLIR")));
 		pathSommet2Sommet = pathReader.readPath(graph);
+		pathReader = new BinaryPathReader(new DataInputStream(new FileInputStream(basePath+"A REMPLIR")));
+		sameOriginDestinationCarrePath = pathReader.readPath(graph);
 		
-		
-		// Initialize solution
-		pathToulouseAuch = createShortesPathAlgorithm(toulouseAuchMpData)
 	}
 	
+	@Test
+	public void noPath(){
+		Assert.assertFalse("found feasible path to an unreachable destination in Midi-Pyrenees map",
+				createShortestPathAlgorithm(noPathMpData).doRun().isFeasible());
+		Assert.assertFalse("found feasible path to an unreachable destination in Toulouse map",
+				createShortestPathAlgorithm(noPathToulouseData).doRun().isFeasible());
+	}
+	
+	@Test
+	public void sameOriginSameDestinationPath() {
+		Assert.assertEquals(sameOriginDestinationCarrePath, createShortestPathAlgorithm(sameOriginDestinationCarreData).doRun().getPath());
+		Assert.assertEquals(sameOriginDestinationINSAPath, createShortestPathAlgorithm(sameOriginDestinationToulouseData).doRun().getPath());
+		Assert.assertEquals(sameOriginDestinationToulousePath, createShortestPathAlgorithm(sameOriginDestinationMpData).doRun().getPath());
+	}
+	
+	@Test
+	public void optimalPath() {
+		Assert.assertEquals(pathToulouseAuch,createShortestPathAlgorithm(toulouseAuchMpData).doRun().getPath());
+		Assert.assertEquals(pathInsaJeanJau,createShortestPathAlgorithm(insaJeanJauToulouseData).doRun().getPath());
+		Assert.assertEquals(pathSommet2Sommet,createShortestPathAlgorithm(sommet2SommetCarreData).doRun().getPath());
+	}
 	
 	
 }
