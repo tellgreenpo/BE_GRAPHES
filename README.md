@@ -78,5 +78,4 @@ Another way is to do a bare clone and then mirror it to your repository: [https:
 
 7. A* implementation ==> Modified constructor in order to be able to switch the modes but created a problem because the cost of origin was not 0
 
-8. JUnit tests creation ==> 
-
+8. JUnit tests creation ==> JUnit tests no apparent error but does not run

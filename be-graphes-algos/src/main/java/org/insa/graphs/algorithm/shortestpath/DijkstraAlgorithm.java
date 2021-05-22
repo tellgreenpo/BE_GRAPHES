@@ -42,6 +42,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     	Label currLabel = null;
     	final ShortestPathData data = getInputData();
     	Label[] tabLabel = initLabel(data);
+    	// Same destination and origin is an infeasible path deal with it
+    	if(data.getDestination().equals(data.getOrigin())) {
+    		return new ShortestPathSolution(data, Status.INFEASIBLE);
+    	}
+    	
         ShortestPathSolution solution = null;
         BinaryHeap<Label> heap = new BinaryHeap<Label>();
         // insert Origin
