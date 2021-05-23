@@ -1,5 +1,6 @@
 package org.insa.graphs.algorithm.shortestpath;
 
+import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -48,18 +49,18 @@ public abstract class ShortestPathTest{
 		final String basePath = "D:\\BEGraphes\\Maps";
 		final String mpMapPath = basePath+".\\midi-pyrenees.mapgr";
 		final String toulouseMapPath = basePath+".\\toulouse.mapgr";
-		final String carreMapPath = basePath+".\\carre.mapgr";
+		final String carreMapPath = "D:\\BEGraphes\\Maps\\carre.mapgr";
 		
 	// Initialize data for tests and Path solution	
 	// Initialization variables for tests on Midi-pyrenees map
 		// Create graph reader for France
-		GraphReader reader = new BinaryGraphReader(new DataInputStream(new FileInputStream(mpMapPath)));
+		GraphReader reader = new BinaryGraphReader(new DataInputStream( new BufferedInputStream(new FileInputStream(mpMapPath))));
 		Graph graph = reader.read();
 		sameOriginDestinationMpData = new ShortestPathData(graph,graph.get(0),graph.get(0),ArcInspectorFactory.getAllFilters().get(0));
 		toulouseAuchMpData = new ShortestPathData(graph,graph.get(244640),graph.get(82946),ArcInspectorFactory.getAllFilters().get(0));
 	
 		
-		PathReader pathReader = new BinaryPathReader(new DataInputStream(new FileInputStream(basePath+"..\\Path\\toulouseAuchLength.path")));
+		PathReader pathReader = new BinaryPathReader(new DataInputStream( new BufferedInputStream(new FileInputStream(basePath+"..\\Path\\toulouseAuchLength.path"))));
 		pathToulouseAuch = pathReader.readPath(graph);
 		
 		
@@ -72,19 +73,19 @@ public abstract class ShortestPathTest{
 		noPathToulouseData = new ShortestPathData(graph,graph.get(5918),graph.get(36861),ArcInspectorFactory.getAllFilters().get(0));
 		
 		
-		pathReader = new BinaryPathReader(new DataInputStream(new FileInputStream(basePath+"..\\Path\\insaJeanJauLength.path")));
+		pathReader = new BinaryPathReader(new DataInputStream( new BufferedInputStream(new FileInputStream(basePath+"..\\Path\\insaJeanJauLength.path"))));
 		pathInsaJeanJau = pathReader.readPath(graph);
 
 		
 	// Initialization variables for tests on square map
 		// graph Reader for square
-		reader = new BinaryGraphReader(new DataInputStream(new FileInputStream(carreMapPath)));
+		reader = new BinaryGraphReader(new DataInputStream( new BufferedInputStream(new FileInputStream(carreMapPath))));
 		graph = reader.read();
 		sameOriginDestinationCarreData = new ShortestPathData(graph,graph.get(0),graph.get(0),ArcInspectorFactory.getAllFilters().get(0));
 		sommet2SommetCarreData = new ShortestPathData(graph,graph.get(9),graph.get(15),ArcInspectorFactory.getAllFilters().get(0));
 		
 		
-		pathReader = new BinaryPathReader(new DataInputStream(new FileInputStream(basePath+"..\\Path\\sommet2Sommet.path")));
+		pathReader = new BinaryPathReader(new DataInputStream( new BufferedInputStream(new FileInputStream(basePath+"..\\Path\\sommet2Sommet.path"))));
 		pathSommet2Sommet = pathReader.readPath(graph);
 		
 	}
